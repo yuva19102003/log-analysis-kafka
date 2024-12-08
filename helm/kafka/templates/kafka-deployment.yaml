@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.kafka.replicaCount }}
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: zookeeper
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: kafka
+          image: {{ .Values.kafka.image.repository }}:{{ .Values.kafka.image.tag }}
+          imagePullPolicy: {{ .Values.imagepolicy }}
+          ports:
+            - containerPort: {{ .Values.kafka.ports.client }}
+          env:
+            - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+              value: "{{ .Values.kafka.zookeeperConnect }}"
+            - name: KAFKA_CFG_LISTENERS
+              value: {{ .Values.kafka.listner }}
+            - name: KAFKA_CFG_ADVERTISED_LISTENERS
+              value: {{ .Values.kafka.advlistner }}
+            - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
+              value: PLAINTEXT:PLAINTEXT
+            - name: KAFKA_CFG_BROKER_ID
+              value: "{{ .Values.kafka.brokerid }}"

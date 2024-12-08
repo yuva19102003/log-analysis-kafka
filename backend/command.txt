@@ -1,0 +1,40 @@
+export KAFKA_BROKER=127.0.0.1:9092
+export MONGO_USER="root"
+export MONGO_PASS="root"
+export MONGO_HOST=127.0.0.1:27017
+export MONGO_DATABASE="users"
+export MONGO_COLLECTION="users"
+
+
+LOGIN-MICROSERVICE:
+
+curl -X POST http://localhost:8081/login -d '{"username": "admin", "password": "admin123"}' -H "Content-Type: application/json"
+
+curl -X POST http://localhost:8081/logout -d '{"username": "admin", "password": "admin123"}' -H "Content-Type: application/json"
+
+
+REGISTER-MICROSERVICE:
+
+curl -X POST http://localhost:8082/register -d '{"username": "user1", "password": "password1"}' -H "Content-Type: application/json"
+
+curl -X PUT http://localhost:8082/update -d '{"username": "user1", "password": "newpassword"}' -H "Content-Type: application/json"
+
+curl -X DELETE http://localhost:8082/delete -d '{"username": "user1"}' -H "Content-Type: application/json"
+
+
+
+REGISTER-MICROSERVICE: [MINIKUBE]
+
+curl -X POST http://192.168.49.2:30082/register -d '{"username": "user1", "password": "password1"}' -H "Content-Type: application/json"
+
+curl -X PUT http://192.168.49.2:30082/update -d '{"username": "user1", "password": "newpassword1"}' -H "Content-Type: application/json"
+
+curl -X DELETE http://192.168.49.2:30082/delete -d '{"username": "user1"}' -H "Content-Type: application/json"
+
+
+LOGIN-MICROSERVICE: [MINIKUBE]
+
+curl -X POST http://192.168.49.2:30081/login -d '{"username": "user1", "password": "password1"}' -H "Content-Type: application/json"
+
+curl -X POST http://192.168.49.2:30081/logout -d '{"username": "user1", "password": "password1"}' -H "Content-Type: application/json"
+

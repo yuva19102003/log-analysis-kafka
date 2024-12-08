@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.login.replicaCount }}
+  selector:
+    matchLabels:
+      app: login
+  template:
+    metadata:
+      labels:
+        app: login
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: mongodb
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: login
+          image: {{ .Values.login.image.repository }}:{{ .Values.login.image.tag }}
+          imagePullPolicy: {{ .Values.imagepolicy }}
+          ports:
+            - containerPort: {{ .Values.login.ports.client }}
+          env:
+            - name: KAFKA_BROKER
+              value: {{ .Values.register.broker }}
+            - name: MONGO_HOST
+              value: {{ .Values.register.mongodbConnect }}
+            - name: MONGO_USER
+              value: "{{ .Values.register.mongouserpass }}"
+            - name: MONGO_PASS
+              value: "{{ .Values.register.mongouserpass }}"
+            - name: MONGO_DATABASE
+              value: "{{ .Values.register.mongodbcollection }}"
+            - name: MONGO_COLLECTION
+              value: "{{ .Values.register.mongodbcollection }}"

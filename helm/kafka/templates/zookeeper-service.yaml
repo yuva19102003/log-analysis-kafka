@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+    - name: client
+      port: {{ .Values.zookeeper.ports.client }}
+      targetPort: {{ .Values.zookeeper.ports.client }}
+  selector:
+    app: zookeeper

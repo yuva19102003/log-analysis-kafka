@@ -1,0 +1,11 @@
+CREATE TOPIC:
+kafka-topics.sh --create --topic user-logs --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+LIST TOPIC:
+kafka-topics.sh --list --bootstrap-server localhost:9092
+
+WATCH TOPIC:
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic user-logs --from-beginning
+
+kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic user-logs --from-beginning
+

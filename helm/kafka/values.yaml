@@ -1,0 +1,22 @@
+namespace: backend-kafka-stack
+imagepolicy: IfNotPresent
+
+zookeeper:
+  replicaCount: 1
+  image:
+    repository: bitnami/zookeeper
+    tag: latest
+  ports:
+    client: 2181
+
+kafka:
+  replicaCount: 1
+  image:
+    repository: bitnami/kafka
+    tag: latest
+  ports:
+    client: 9092
+  zookeeperConnect: zookeeper:2181
+  brokerid: 1
+  advlistner: PLAINTEXT://kafka:9092
+  listner: PLAINTEXT://0.0.0.0:9092

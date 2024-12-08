@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: register
+  namespace: {{ .Values.namespace }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: register-service
+      port: {{ .Values.register.ports.client }}
+      targetPort: {{ .Values.register.ports.client }}
+      nodePort: {{ .Values.service.register }}
+  selector:
+    app: register

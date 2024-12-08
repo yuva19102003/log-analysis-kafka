@@ -1,0 +1,29 @@
+
+START CONTAINER:
+
+docker run --username mongodb password -p 27017:27017 \
+  -d \
+  -e MONGO_INITDB_ROOT_USERNAME=root \
+  -e MONGO_INITDB_ROOT_PASSWORD=root \
+  mongodb/mongodb-community-server:latest
+
+
+LOGIN TO CONTAINER:
+
+docker exec -it mongodb mongosh -u root -p root
+
+
+DATABASE: use users
+COLLECTIONS: db.createCollection("users")
+DOCUMENTS:
+
+db.users.insertMany([
+  { username: "admin", password: "admin123" },
+  { username: "testuser", password: "testuser123" }
+])
+
+
+LIST DOCUMENTS: db.users.find()
+
+
+COMMIT CONTAINER TO IMAGE: docker commit mongodb yuva19102003/users-mongodb:latest

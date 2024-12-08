@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: register
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.register.replicaCount }}
+  selector:
+    matchLabels:
+      app: register
+  template:
+    metadata:
+      labels:
+        app: register
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: mongodb
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: register
+          image: {{ .Values.register.image.repository }}:{{ .Values.register.image.tag }}
+          imagePullPolicy: {{ .Values.imagepolicy }}
+          ports:
+            - containerPort: {{ .Values.register.ports.client }}
+          env:
+            - name: KAFKA_BROKER
+              value: {{ .Values.register.broker }}
+            - name: MONGO_HOST
+              value: {{ .Values.register.mongodbConnect }}
+            - name: MONGO_USER
+              value: "{{ .Values.register.mongouserpass }}"
+            - name: MONGO_PASS
+              value: "{{ .Values.register.mongouserpass }}"
+            - name: MONGO_DATABASE
+              value: "{{ .Values.register.mongodbcollection }}"
+            - name: MONGO_COLLECTION
+              value: "{{ .Values.register.mongodbcollection }}"

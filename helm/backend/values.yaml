@@ -1,0 +1,36 @@
+namespace: backend-kafka-stack
+imagepolicy: IfNotPresent
+
+mongodb:
+  replicaCount: 1
+  image:
+    repository: yuva19102003/log-analysis
+    tag: mongodb-users
+  ports:
+    client: 27017
+
+register:
+  replicaCount: 1
+  image:
+    repository: yuva19102003/log-analysis
+    tag: register-microservice
+  ports:
+    client: 8082
+
+  mongodbConnect: mongodb:27017
+  broker: kafka:9092
+  mongouserpass: root
+  mongodbcollection: users
+
+login:
+  replicaCount: 1
+  image:
+    repository: yuva19102003/log-analysis
+    tag: login-microservice
+  ports:
+    client: 8081
+
+service:
+  type: NodePort
+  register: 30082
+  login: 30081

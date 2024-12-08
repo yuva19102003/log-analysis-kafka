@@ -1,0 +1,8 @@
+FROM golang:1.22
+
+WORKDIR /build
+COPY . .
+RUN go mod download 
+EXPOSE 8081
+RUN go build -o main .
+CMD ["./main"]
